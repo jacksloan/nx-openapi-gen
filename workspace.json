@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "projects": {
+    "nest-gen": "packages/nest-gen",
+    "nest-gen-e2e": "e2e/nest-gen-e2e"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "name": "nest-gen",
+  "version": "0.0.1",
+  "generators": {
+    "nest-gen": {
+      "factory": "./src/generators/nest-gen/generator",
+      "schema": "./src/generators/nest-gen/schema.json",
+      "description": "nest-gen generator"
+    }
+  }
+}

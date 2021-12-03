@@ -1,0 +1,56 @@
+{
+  "root": "packages/nest-gen",
+  "sourceRoot": "packages/nest-gen/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/nest-gen/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/nest-gen"],
+      "options": {
+        "jestConfig": "packages/nest-gen/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "build": {
+      "executor": "@nrwl/node:package",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/nest-gen",
+        "tsConfig": "packages/nest-gen/tsconfig.lib.json",
+        "packageJson": "packages/nest-gen/package.json",
+        "main": "packages/nest-gen/src/index.ts",
+        "assets": [
+          "packages/nest-gen/*.md",
+          {
+            "input": "./packages/nest-gen/src",
+            "glob": "**/!(*.ts)",
+            "output": "./src"
+          },
+          {
+            "input": "./packages/nest-gen/src",
+            "glob": "**/*.d.ts",
+            "output": "./src"
+          },
+          {
+            "input": "./packages/nest-gen",
+            "glob": "generators.json",
+            "output": "."
+          },
+          {
+            "input": "./packages/nest-gen",
+            "glob": "executors.json",
+            "output": "."
+          }
+        ]
+      }
+    }
+  },
+  "tags": []
+}
