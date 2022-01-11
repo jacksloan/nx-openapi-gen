@@ -7,20 +7,25 @@ import {
   offsetFromRoot,
   Tree,
 } from '@nrwl/devkit';
+import { readFileSync } from 'fs';
 import * as path from 'path';
 import { NestGenGeneratorSchema } from './schema';
+
+import { OpenAPIV3 } from 'openapi-types';
+import SwaggerParser from '@apidevtools/swagger-parser';
 
 interface NormalizedSchema extends NestGenGeneratorSchema {
   projectName: string;
   projectRoot: string;
   projectDirectory: string;
   parsedTags: string[];
+  openapiDocument: OpenAPIV3.Document;
 }
 
-function normalizeOptions(
+async function normalizeOptions(
   tree: Tree,
   options: NestGenGeneratorSchema
-): NormalizedSchema {
+): Promise<NormalizedSchema> {
   const name = names(options.name).fileName;
   const projectDirectory = options.directory
     ? `${names(options.directory).fileName}/${name}`
@@ -31,12 +36,17 @@ function normalizeOptions(
     ? options.tags.split(',').map((s) => s.trim())
     : [];
 
+  const specContents = readFileSync(options.specPath).toString();
+  const specParsed = JSON.parse(specContents);
+  const specValidated = await SwaggerParser.validate(specParsed);
+
   return {
     ...options,
     projectName,
     projectRoot,
     projectDirectory,
     parsedTags,
+    openapiDocument: specParsed,
   };
 }
 
@@ -56,7 +66,7 @@ function addFiles(tree: Tree, options: NormalizedSchema) {
 }
 
 export default async function (tree: Tree, options: NestGenGeneratorSchema) {
-  const normalizedOptions = normalizeOptions(tree, options);
+  const normalizedOptions = await normalizeOptions(tree, options);
   addProjectConfiguration(tree, normalizedOptions.projectName, {
     root: normalizedOptions.projectRoot,
     projectType: 'library',

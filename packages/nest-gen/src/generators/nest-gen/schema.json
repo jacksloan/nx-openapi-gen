@@ -14,6 +14,11 @@
       },
       "x-prompt": "What name would you like to use?"
     },
+    "specPath": {
+      "type": "string",
+      "description": "Path or URL of the openapi spec",
+      "alias": "s"
+    },
     "tags": {
       "type": "string",
       "description": "Add tags to the project (used for linting)",
